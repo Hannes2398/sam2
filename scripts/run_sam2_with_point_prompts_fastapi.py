@@ -8,8 +8,8 @@ from sam2.sam2_image_predictor import SAM2ImagePredictor
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     model = build_sam2(os.getenv('CFG'), os.getenv('CKPT'))
-    model.to(os.getenv('DEVICE'))
     predictor = SAM2ImagePredictor(model)
+    predictor.to(os.getenv('DEVICE'))
     app.state.predictor = predictor
     yield
     predictor = None
