@@ -1,3 +1,6 @@
+"""This module implements a FastAPI route for SAM2 based on point prompts specified as a list of coordinates. This can be used in conjunction with
+AnomalyDINO for training-free defect segmentation. It returns a list of binary masks containing defects (class-agnostic).
+"""
 import os, json, numpy as np, torch, io, base64
 from PIL import Image
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException

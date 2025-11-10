@@ -1,3 +1,5 @@
+"""This module implements SAM2 with point prompts for single images.
+"""
 import argparse
 import cv2
 import json
