@@ -3,10 +3,14 @@ AnomalyDINO for training-free defect segmentation. It returns a list of binary m
 """
 import os, json, numpy as np, torch, io, base64
 from PIL import Image
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Header, Depends
 from contextlib import asynccontextmanager
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
+
+def verify_api_key(api_key: str=Header(None)):
+    if api_key != os.getenv("SAM_API_KEY"):
+        raise HTTPException(status_code=401, detail="Invalid or missing API Key")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -22,6 +26,7 @@ app = FastAPI(title="SAM2 API", lifespan=lifespan)
 async def segment(
     image: UploadFile = File(..., description="RGB"),
     point_prompt: str = Form(..., description="JSON list [[x,y],...]"),
+    api_key: str = Depends(verify_api_key)
 ):
     predictor = app.state.predictor
     if predictor is None:
