@@ -10,6 +10,7 @@ from sam2.sam2_image_predictor import SAM2ImagePredictor
 
 def verify_api_key(api_key: str=Header(None)):
     if api_key != os.getenv("SAM_API_KEY"):
+        print(api_key)
         raise HTTPException(status_code=401, detail="Invalid or missing API Key")
 
 @asynccontextmanager
